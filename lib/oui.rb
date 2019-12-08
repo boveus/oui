@@ -18,7 +18,7 @@ module OUI
   ROOT = File.expand_path(File.join('..', '..'), __FILE__)
   LOCAL_DB_DEFAULT = File.join(ROOT, 'db', 'oui.sqlite3')
   LOCAL_TXT_FILE = File.join(ROOT, 'data', 'oui.txt')
-  REMOTE_TXT_URI = 'http://standards.ieee.org/develop/regauth/oui/oui.txt'
+  REMOTE_TXT_URI = 'https://standards.ieee.org/develop/regauth/oui/oui.txt'
   LOCAL_MANUAL_FILE = File.join(ROOT, 'data', 'oui-manual.json')
   FIRST_LINE_INDEX = 7
   EXPECTED_DUPLICATES = [0x0001C8, 0x080030]
@@ -124,7 +124,7 @@ module OUI
   def close_db
     semaphore.synchronize do
       debug 'Closing database'
-      if @@db 
+      if @@db
         @@db.disconnect
         @@db = nil
       end
@@ -182,7 +182,7 @@ module OUI
       debug "update_db(local = #{local}, db_file = #{db_file}) finish"
     end
   end
-  
+
   private
 
   def connect_file_db(f)
@@ -201,7 +201,7 @@ module OUI
       debug 'Connecting to in-memory database'
       if RUBY_PLATFORM == 'java'
         Sequel.connect('jdbc:sqlite::memory:')
-      else 
+      else
         Sequel.sqlite # in-memory sqlite database
       end
     else
@@ -223,7 +223,7 @@ module OUI
 
   def drop_table
     debug 'drop_table'
-    db.drop_table(TABLE) if table? 
+    db.drop_table(TABLE) if table?
   end
 
   def create_table
@@ -325,7 +325,7 @@ module OUI
 
   def install_updates
     debug 'install_updates'
-    lines = fetch.split("\n").map { |x| x.sub(/\r$/, '') } 
+    lines = fetch.split("\n").map { |x| x.sub(/\r$/, '') }
     parse_lines_into_groups(lines).each_with_index do |group, idx|
       create_from_line_group(group)
       debug "#{ERASE_LINE}Created records #{idx}" if idx % 1000 == 0
